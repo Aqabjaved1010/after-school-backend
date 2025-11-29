@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import { MongoClient, ObjectId } from 'mongodb'
@@ -7,6 +8,8 @@ const port = process.env.PORT || 4000
 
 const mongoUrl = process.env.MONGO_URL
 const dbName = process.env.DB_NAME || 'after_school'
+
+console.log('MONGO_URL value:', mongoUrl)
 
 let db
 
