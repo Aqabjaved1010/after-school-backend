@@ -54,6 +54,11 @@ app.post('/orders', async (req, res) => {
       return
     }
 
+    if (!/^[0-9]{10,11}$/.test(order.customerPhone)) {
+      res.status(400).json({ error: 'Invalid phone number length' })
+      return
+    }
+
     const result = await db.collection('orders').insertOne(order)
     res.status(201).json({ insertedId: result.insertedId })
   } catch (err) {
