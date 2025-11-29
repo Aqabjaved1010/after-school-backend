@@ -35,6 +35,16 @@ app.get('/lessons', async (req, res) => {
   }
 })
 
+app.get('/orders', async (req, res) => {
+  try {
+    const orders = await db.collection('orders').find({}).toArray()
+    res.json(orders)
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load orders' })
+  }
+})
+
+
 app.post('/orders', async (req, res) => {
   try {
     const order = req.body
