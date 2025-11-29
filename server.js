@@ -70,6 +70,11 @@ app.put('/lessons/:id/spaces', async (req, res) => {
   }
 })
 
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' })
+})
+
+
 start().catch(err => {
   console.error(err)
   process.exit(1)
