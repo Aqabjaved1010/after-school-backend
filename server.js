@@ -9,8 +9,6 @@ const port = process.env.PORT || 4000
 const mongoUrl = process.env.MONGO_URL
 const dbName = process.env.DB_NAME || 'after_school'
 
-console.log('MONGO_URL value:', mongoUrl)
-
 let db
 
 app.use(cors())
@@ -35,6 +33,40 @@ app.get('/lessons', async (req, res) => {
   }
 })
 
+app.get('/search', async (req, res) => {
+  try {
+    const q = (req.query.q || '').trim()
+
+    if (!q) {
+      const lessons = await db.collection('lessons').find({}).toArray()
+      res.json(lessons)
+      return
+    }
+
+    const regex = new RegExp(q, 'i')
+
+    const orConditions = [
+      { subject: regex },
+      { location: regex },
+      { topic: regex }
+    ]
+
+    const num = Number(q)
+    if (!Number.isNaN(num)) {
+      orConditions.push({ price: num }, { spaces: num })
+    }
+
+    const lessons = await db
+      .collection('lessons')
+      .find({ $or: orConditions })
+      .toArray()
+
+    res.json(lessons)
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to search lessons' })
+  }
+})
+
 app.get('/orders', async (req, res) => {
   try {
     const orders = await db.collection('orders').find({}).toArray()
@@ -43,7 +75,6 @@ app.get('/orders', async (req, res) => {
     res.status(500).json({ error: 'Failed to load orders' })
   }
 })
-
 
 app.post('/orders', async (req, res) => {
   try {
@@ -75,8 +106,6 @@ app.post('/orders', async (req, res) => {
   }
 })
 
-
-
 app.put('/lessons/:id/spaces', async (req, res) => {
   try {
     const id = req.params.id
@@ -95,7 +124,6 @@ app.put('/lessons/:id/spaces', async (req, res) => {
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' })
 })
-
 
 start().catch(err => {
   console.error(err)
