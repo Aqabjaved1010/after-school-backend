@@ -48,12 +48,19 @@ app.get('/orders', async (req, res) => {
 app.post('/orders', async (req, res) => {
   try {
     const order = req.body
+
+    if (!order.customerName || !order.customerPhone || !order.items) {
+      res.status(400).json({ error: 'Invalid order data' })
+      return
+    }
+
     const result = await db.collection('orders').insertOne(order)
     res.status(201).json({ insertedId: result.insertedId })
   } catch (err) {
     res.status(500).json({ error: 'Failed to create order' })
   }
 })
+
 
 app.put('/lessons/:id/spaces', async (req, res) => {
   try {
