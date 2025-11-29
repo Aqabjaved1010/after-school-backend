@@ -49,12 +49,21 @@ app.post('/orders', async (req, res) => {
   try {
     const order = req.body
 
-    if (!order.customerName || !order.customerPhone || !order.items) {
+    if (
+      !order.customerName ||
+      typeof order.customerName !== 'string' ||
+      !order.customerPhone ||
+      typeof order.customerPhone !== 'string' ||
+      !Array.isArray(order.items) ||
+      order.items.length === 0
+    ) {
       res.status(400).json({ error: 'Invalid order data' })
       return
     }
 
-    if (!/^[0-9]{10,11}$/.test(order.customerPhone)) {
+    const phone = order.customerPhone.trim()
+
+    if (!/^[0-9]{10,11}$/.test(phone)) {
       res.status(400).json({ error: 'Invalid phone number length' })
       return
     }
@@ -65,6 +74,7 @@ app.post('/orders', async (req, res) => {
     res.status(500).json({ error: 'Failed to create order' })
   }
 })
+
 
 
 app.put('/lessons/:id/spaces', async (req, res) => {
