@@ -16,6 +16,8 @@ app.use((req, res, next) => {
   next()
 })
 
+app.use('/images', express.static('public/images'))
+
 
 app.use(cors())
 app.use(express.json())

@@ -12,7 +12,7 @@ async function run() {
   await lessons.deleteMany({})
 
   await lessons.insertMany([
-    { topic: 'Maths',   subject: 'Maths',   location: 'Hendon',       price: 100, space: 5, spaces: 5, icon: '📘' },
+    { topic: 'Maths',   subject: 'Maths',   location: 'Hendon',       price: 100, space: 5, spaces: 5, icon: '📘' image: 'maths.jpg'},
     { topic: 'English', subject: 'English', location: 'Colindale',    price: 90,  space: 5, spaces: 5, icon: '📗' },
     { topic: 'Science', subject: 'Science', location: 'Brent Cross',  price: 110, space: 5, spaces: 5, icon: '🔬' },
     { topic: 'History', subject: 'History', location: 'Golders Green',price: 80,  space: 5, spaces: 5, icon: '📜' },
